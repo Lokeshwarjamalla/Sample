@@ -1,1 +1,72 @@
+To set up a Hyperledger Fabric test network, follow these steps:
+
+Prerequisites
+Ensure you have the following installed:
+
+Docker and Docker Compose
+Node.js and npm
+Go
+Hyperledger Fabric binaries
+Step 1: Install Hyperledger Fabric Samples, Binaries, and Docker Images
+Clone the Hyperledger Fabric samples repository, which contains sample scripts, chaincode, and a preconfigured test network.
+
+bash
+Copy code
+git clone https://github.com/hyperledger/fabric-samples.git
+cd fabric-samples
+Run the script to download the binaries and images.
+
+bash
+Copy code
+curl -sSL https://bit.ly/2ysbOFE | bash -s
+This will download the binaries, Docker images, and other dependencies for Hyperledger Fabric.
+
+Step 2: Start the Test Network
+Navigate to the test-network directory in the fabric-samples folder.
+
+bash
+Copy code
+cd test-network
+Start the network by running the following script, which will set up a Fabric network with two organizations:
+
+bash
+Copy code
+./network.sh up
+Create a channel (e.g., "mychannel") for the organizations to communicate.
+
+bash
+Copy code
+./network.sh createChannel -c mychannel
+Step 3: Deploy the Chaincode
+You need a smart contract (chaincode) to define asset management operations such as creating, updating, and querying assets.
+
+Deploy a sample chaincode (e.g., "basic") provided by Fabric or write your own.
+bash
+Copy code
+./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go
+This deploys the "basic" chaincode to the channel.
+Step 4: Interact with the Network
+After deploying the chaincode, you can interact with the network using the Fabric CLI or through applications in Node.js, Java, or Go.
+
+Use the CLI to test chaincode commands. For example, create an asset using:
+
+bash
+Copy code
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "$ORDERER_CA" -C mychannel -n basic -c '{"Args":["CreateAsset","asset1","DEALERID1","MSISDN1","1234","1000","Active","500","Credit","Test Remark"]}'
+Query assets by running:
+
+bash
+Copy code
+peer chaincode query -C mychannel -n basic -c '{"Args":["ReadAsset","asset1"]}'
+This basic setup allows you to deploy and interact with assets on a Hyperledger Fabric network. You can customize the chaincode to support additional asset fields like TRANSAMOUNT, TRANSTYPE, and REMARKS.
+
+
+
+
+
+
+
+
+
+
 
